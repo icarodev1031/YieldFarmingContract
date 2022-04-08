@@ -3,13 +3,13 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./PmknToken.sol";
 
-contract TokenFarm{
+contract PmknFarm{
     mapping(address=>uint256) public stakingBalance;
     mapping(address=>bool) public isStaking;
     mapping(address=>uint256) public startTime;
     mapping(address=>uint256) public pmknBalance;
 
-    string public name = "TokenFarm";
+    string public name = "PmknFarm";
 
     IERC20 public daiToken;
     PmknToken public pmknToken;
@@ -19,8 +19,8 @@ contract TokenFarm{
     event YieldWithdraw(address indexed to, uint256 amount);
 
     constructor(
-        IERC20 _daiToken;
-        PmknToken _pmknToken;
+        IERC20 _daiToken,
+        PmknToken _pmknToken
     ){
         daiToken = _daiToken;
         pmknToken = _pmknToken;
@@ -70,10 +70,10 @@ contract TokenFarm{
     }
 
     function calculateYieldTotal(address user) public view returns(uint256){
-        uint256 time = calculateYieldTime(user) * 10 ** 18;
+        uint256 time = calculateYieldTime(user) * 10**18;
         uint256 rate = 86400;
         uint256 timeRate = time/rate;
-        uint256 rowYield = (stakingBalance[user]*timeRate)/10*18;
+        uint256 rawYield = (stakingBalance[user]*timeRate)/10**18;
         return rawYield;
     }
 
